@@ -85,7 +85,7 @@ function Signup() {
             width: 100%;
             margin-top: 100px;
             padding: 20px;
-            position: relative;
+            position: relative; /* Added for proper positioning */
           }
 
           .signup-box {
@@ -135,12 +135,13 @@ function Signup() {
 
           .terpedu-logo-container {
             position: absolute;
-            left: 5%;
-            transform: translateY(-50%);
-            top: 50%;
+            top: -70px; /* Adjusted to position above the signup box */
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 1;
           }
 
           .side-image-container {
@@ -165,14 +166,14 @@ function Signup() {
       </header>
 
       <div className="signup-container">
-        <div className="terpedu-logo-container">
-          <img
-            src="/TerpEdu.png"
-            alt="TerpEdu Logo"
-            style={{ maxWidth: '180px', height: 'auto' }}
-          />
-        </div>
         <div className="signup-box">
+          <div className="terpedu-logo-container">
+            <img
+              src="/TerpEdu.png"
+              alt="TerpEdu Logo"
+              style={{ maxWidth: '180px', height: 'auto' }}
+            />
+          </div>
           <h1>SIGN UP</h1>
           <form onSubmit={handleSubmit}>
             <input
