@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function AdminDashboard() {
-  // Extract user_name from URL parameters using useParams hook
   const { user_name } = useParams();
   const navigate = useNavigate();
 
@@ -10,21 +9,18 @@ function AdminDashboard() {
     <div className="admin_dashboard">
       <style>
         {`
-          /* Importing custom Google font */
           @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
 
-          
           body {
             margin: 0;
             font-family: 'Open Sans', sans-serif;
             background-color: #f0f2f5;
-            overflow: hidden; /* Prevents both horizontal and vertical scrolling */
+            overflow: hidden;
           }
 
-          /* Header styling */
           .header {
             width: 100%;
-            background-color: #D32F2F; /* Red background for header */
+            background-color: #D32F2F;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -34,7 +30,6 @@ function AdminDashboard() {
             font-size: 18px;
           }
 
-          /* Styling for the header title section */
           .header .title {
             display: flex;
             align-items: center;
@@ -44,16 +39,14 @@ function AdminDashboard() {
           .header .title span {
             margin-left: 10px;
             font-weight: bold;
-            font-size: 28px; /* Larger font size for the title */
+            font-size: 28px;
           }
 
-          /* Styling for the welcome message */
           .welcome-message {
             margin: 0 auto;
             font-size: 18px;
           }
 
-          /* Logo container styling */
           .logo-container {
             display: flex;
             justify-content: center;
@@ -67,7 +60,6 @@ function AdminDashboard() {
             height: auto;
           }
 
-          /* Dashboard content container styling */
           .dashboard-content {
             display: flex;
             flex-wrap: wrap;
@@ -77,9 +69,8 @@ function AdminDashboard() {
             box-sizing: border-box;
           }
 
-          /* Card styling for dashboard items */
           .dashboard-card {
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 0;
             margin: 15px;
             border-radius: 10px;
@@ -91,28 +82,25 @@ function AdminDashboard() {
             height: 300px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s; /* Transition for hover effect */
-            overflow: hidden; /* Ensures content does not overflow */
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
           }
 
-          /* Hover effect for cards */
           .dashboard-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
           }
 
-          /* Card top section styling for icons */
           .card-top {
             width: 100%;
             height: 60%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #D32F2F; /* Default red color for card tops */
+            background-color: #D32F2F;
             color: white;
           }
 
-          /* Grey background for alternating cards */
           .card-top.grey {
             background-color: #BFBFBF;
           }
@@ -122,7 +110,6 @@ function AdminDashboard() {
             height: auto;
           }
 
-          /* Card bottom section styling for text */
           .card-bottom {
             width: 100%;
             padding: 10px;
@@ -137,32 +124,28 @@ function AdminDashboard() {
             margin: 5px 0 0 0;
           }
 
-          /* Turtle image styling for background display */
           .turtle-image {
             position: fixed;
             right: 0;
             bottom: 0;
             max-width: 400px;
-            opacity: 0.3; /* Adjust transparency for subtle appearance */
-            z-index: -1; /* Ensures it's behind content */
+            opacity: 0.3;
+            z-index: -1;
           }
         `}
       </style>
 
-      {/* Header section with title and welcome message */}
       <header className="header">
         <div className="title">
-          <span>TerpEdu</span> {/* Static title */}
+          <span>TerpEdu</span>
         </div>
-        <div className="welcome-message">Hi {user_name}, Welcome back!</div> {/* Welcome message */}
+        <div className="welcome-message">Hi {user_name}, Welcome back!</div>
       </header>
 
-      {/* Logo container with centered image */}
       <div className="logo-container">
         <img src="/TerpEdu.png" alt="TerpEdu Logo" />
       </div>
 
-      {/* Dashboard cards for navigation of Admin Dashboard */}
       <main className="dashboard-content">
         <div className="dashboard-card" onClick={() => navigate('/user-management')}>
           <div className="card-top">
@@ -201,7 +184,6 @@ function AdminDashboard() {
         </div>
       </main>
 
-      {/* For turtle image in the background */}
       <img src="/turtle.png" alt="Turtle" className="turtle-image" />
     </div>
   );

@@ -57,77 +57,53 @@ class StudentController:
 
     def dashboard(self, userID):
         if not userID:
-            print("Error: Missing userID")  # Debug log
             return jsonify({"error": "Missing userID"}), 400
 
         try:
-            print(f"Fetching dashboard data for userID: {userID}")  # Debug log
             enrolled_courses = self._student_dao.get_enrolled_courses(userID)
             available_courses = self._student_dao.get_available_courses(userID)
 
-            # Handle empty available_courses
-            if not available_courses:
-                print("No available courses found.")  # Debug log
-                available_courses = []
-
-            # Convert available_courses to a list of dictionaries
-            available_courses = [
-                {"course_id": course[0], "course_name": course[1]} 
-                for course in available_courses
+            # Fix for properly formatting enrolled_courses
+            enrolled_courses = [
+                {"course_id": course[0], "course_name": course[1]}
+                for course in enrolled_courses
             ]
 
-            print(f"Dashboard data: Enrolled: {enrolled_courses}, Available: {available_courses}")  # Debug log
+            available_courses = [
+                {"course_id": course[0], "course_name": course[1]}
+                for course in available_courses
+            ]
 
             return jsonify({
                 "enrolled_courses": enrolled_courses,
                 "available_courses": available_courses
             }), 200
         except Exception as e:
-            print(f"Error in dashboard method: {e}")  # Debug log
             return jsonify({"error": str(e)}), 500
+
     def get_announcements(self):
-        """
-        Retrieve all announcements.
-        Returns:
-            dict: Status and a list of announcements.
-        """
         try:
-            # Fetch announcements using DAO
-            announcements = self.admin_dao.get_announcements()
-            
-            return {"status": "success", "announcements": announcements}
+            announcements = self._student_dao.get_announcements()
+            return jsonify({"status": "success", "announcements": announcements})
         except Exception as e:
-            # Handle any exceptions and return an error message
-            return {"status": "error", "message": str(e)}
-    
+            return jsonify({"status": "error", "message": str(e)}), 500
+
     def get_material(self):
-        """
-        Retrieve course materials accessible by a given user.
-        Args:
-            user_id (int): The ID of the user.
-        Returns:
-            JSON response with materials or an error message.
-        """
         try:
             materials = self._student_dao.get_course_materials_by_user()
-            print("course_controller", materials)
-            
             if not materials:
                 return jsonify({"message": "No materials found for the specified user."}), 404
 
-            # Format materials for response
             formatted_materials = [
                 {
-                    "material_id": material[0],  
+                    "material_id": material[0],
                     "material_type": material[1],
                     "title": material[2],
-                    "file_path": f"../frontend/public/{material[3]}"  
+                    "file_path": f"../frontend/public/{material[3]}"
                 }
                 for material in materials
             ]
 
             return jsonify(formatted_materials), 200
         except Exception as e:
-            print(f"Error occurred: {e}")  # Log the error for debugging
             return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
-    
