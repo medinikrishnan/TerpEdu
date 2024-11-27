@@ -1,9 +1,22 @@
-import React from 'react';
+// import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function AdminDashboard() {
   const { user_name } = useParams();
   const navigate = useNavigate();
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
+
+  const handleProfileClick = () => {
+    setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
+  };
+
+  // Handle logout functionality (e.g., clearing session or redirecting)
+  const handleLogout = () => {
+    console.log('Logging out');
+    navigate('/'); // Example of redirecting to login page
+  };
+
 
   return (
     <div className="admin_dashboard">
@@ -19,16 +32,17 @@ function AdminDashboard() {
           }
 
           .header {
-            width: 100%;
-            background-color: #D32F2F;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            font-size: 18px;
-          }
+          background-color: #D32F2F;
+          color: white;
+          height: 70px;
+          padding: 0 20px;
+          display: flex;
+          align-items: center;
+          font-family: 'Open Sans', sans-serif;
+          font-weight: bold;
+          font-size: 22px;
+          position: relative;
+        }
 
           .header .title {
             display: flex;
@@ -46,6 +60,40 @@ function AdminDashboard() {
             margin: 0 auto;
             font-size: 18px;
           }
+          
+          .profile-icon {
+          font-size: 20px;
+          position: absolute;
+          right: 20px;
+          cursor: pointer;
+
+        }
+        
+         .dropdown {
+          position: absolute;
+          right: 20px;
+          top: 50px; /* Position below the icon */
+          background-color: red;
+          border: 1px solid #ccc;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+          z-index: 10;
+          width: 100px;
+          text-align: center;
+          display: ${dropdownVisible ? 'block' : 'none'};
+        }
+
+        .dropdown button {
+          padding: 10px;
+          background-color: #D32F2F;
+          color: white;
+          border: none;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .dropdown button:hover {
+          background-color: #b71c1c;
+        }
 
           .logo-container {
             display: flex;
@@ -140,6 +188,14 @@ function AdminDashboard() {
           <span>TerpEdu</span>
         </div>
         <div className="welcome-message">Hi {user_name}, Welcome back!</div>
+        <div className="profile-icon" onClick={handleProfileClick}>
+            👤
+            {dropdownVisible && (
+              <div className="dropdown">
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
       </header>
 
       <div className="logo-container">
