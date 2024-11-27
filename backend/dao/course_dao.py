@@ -93,14 +93,28 @@ class CourseDao:
             params = (course_id, instructor_id, instructor_id)
             dao.execute_query(sql, params=params)
             
+    # def get_user_counts(self):
+    #     sql = """
+    #     SELECT Role, COUNT(*) as Count
+    #     FROM users
+    #     GROUP BY Role;
+    #     """
+    #     results = dao.execute_query(sql, fetch=True)
+    #     return {row[0]: row[1] for row in results}
+    
     def get_user_counts(self):
         sql = """
         SELECT Role, COUNT(*) as Count
         FROM users
         GROUP BY Role;
         """
-        results = dao.execute_query(sql, fetch=True)
-        return {row[0]: row[1] for row in results}
+        try:
+            results = dao.execute_query(sql, fetch=True)  # No params required
+            return {row[0]: row[1] for row in results}
+        except Exception as e:
+            print(f"Database operation failed: {e}")
+            return {}
+
     
     def get_enrolled(self, course_id):
         sql = """

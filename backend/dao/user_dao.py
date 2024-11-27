@@ -154,7 +154,8 @@ class UserDao:
         sql = "SELECT UserID, Name, Email, Role, DateCreated FROM users;"
         results = dao.execute_query(sql, fetch=True)
         if results:
-            print(f"Debug: Retrieved users: {results}")
+            # print(f"Debug: Retrieved users: {results}")
+            pass
         else:
             print("Debug: No users found.")
         return results

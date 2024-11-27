@@ -79,7 +79,7 @@ class UserController:
                     "Name": user[1],
                     "Email": user[2],
                     "Role": user[3],
-                    "DateCreated": user[4].strftime('%Y-%m-%d %H:%M:%S')
+                    "DateCreated": user[4]
                 }
                 for user in users
             ]
