@@ -34,6 +34,7 @@ class StudentController:
             return jsonify({"error": str(e)}), 500
 
     def get_enrolled_courses(self):
+        # Fetch enrolled courses for a student
         user_id = request.args.get('user_id')
         if not user_id:
             return jsonify({"error": "Missing user_id"}), 400
@@ -45,6 +46,7 @@ class StudentController:
             return jsonify({"error": str(e)}), 500
 
     def get_course_materials(self):
+        # Get materials for a course
         course_id = request.args.get('course_id')
         if not course_id:
             return jsonify({"error": "Missing course_id"}), 400
@@ -63,7 +65,7 @@ class StudentController:
             enrolled_courses = self._student_dao.get_enrolled_courses(userID)
             available_courses = self._student_dao.get_available_courses(userID)
 
-            # Fix for properly formatting enrolled_courses
+            # Format enrolled_courses properly
             enrolled_courses = [
                 {"course_id": course[0], "course_name": course[1]}
                 for course in enrolled_courses
