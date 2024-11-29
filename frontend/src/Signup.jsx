@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./chatbot/chatbot.css"; // Import chatbot styling
 
 function Signup() {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ function Signup() {
     address: '',
     phoneNumber: ''
   });
+
+  const [showChatbot, setShowChatbot] = useState(false); // Chatbot visibility state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +45,31 @@ function Signup() {
       console.error('Error:', error);
     }
   };
+
+  const toggleChatbot = () => {
+    console.log("Chatbot visibility toggled:", !showChatbot);
+    setShowChatbot(!showChatbot);
+  };
+
+
+useEffect(() => {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "/chatbot/chatbot.css";
+  document.head.appendChild(link);
+
+  const script = document.createElement("script");
+  script.src = "/chatbot/chatbot.js";
+  script.async = true;
+  document.body.appendChild(script);
+
+  return () => {
+    document.head.removeChild(link);
+    document.body.removeChild(script);
+  };
+}, []);
+
+
 
   return (
     <div>
@@ -85,7 +113,7 @@ function Signup() {
             width: 100%;
             margin-top: 100px;
             padding: 20px;
-            position: relative; /* Added for proper positioning */
+            position: relative;
           }
 
           .signup-box {
@@ -134,15 +162,16 @@ function Signup() {
           }
 
           .terpedu-logo-container {
-            position: absolute;
-            top: -70px; /* Adjusted to position above the signup box */
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
+              position: absolute; 
+              top: -60px; /* Adjust this value to move it further up or down */
+              left: 45%;
+              transform: translateX(-50%);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1;
           }
+
 
           .side-image-container {
             position: fixed;
@@ -157,6 +186,29 @@ function Signup() {
           .side-image {
             width: 250px;
             height: auto;
+          }
+
+          .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+          }
+
+          .chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 400px;
+            max-height: 500px;
+            overflow: hidden;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
           }
         `}
       </style>
@@ -249,6 +301,34 @@ function Signup() {
           className="side-image"
         />
       </div>
+
+      {/* Chatbot Toggle Button */}
+      <button className="chatbot-toggle" onClick={toggleChatbot}>
+        <img
+          src="/chatbot/image/icon.png"
+          alt="Chatbot"
+          style={{ width: '50px', height: '50px' }}
+        />
+      </button>
+
+      {/* Chatbot */}
+      {showChatbot && (
+        <div className="chatbot-container">
+          <div id="chatbox">
+            <div className="chatbot-header">TerpEdu Buddy</div>
+            <div id="chat-messages">
+              <div className="bot-message">
+                <div className="message">Welcome to TerpEdu! I am TerpEdu Buddy.</div>
+              </div>
+              <div id="suggestion-buttons" className="suggestions"></div>
+            </div>
+            <div className="chatbot-footer">
+              <input id="user-input" type="text" placeholder="Ask a question..." />
+              <button id="send-btn">Send</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
