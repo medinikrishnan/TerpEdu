@@ -15,7 +15,7 @@ function Inbox() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/user/get_notifications/${courseId}`);
+      const response = await fetch(`http://127.0.0.1:5000/user/get_notifications/${courseId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch notifications.');
       }
@@ -181,8 +181,8 @@ function Inbox() {
               ) : (
                 notifications.map((notification) => (
                   <div key={notification.NotificationID} className="notification">
-                    <p><strong>Message:</strong> {notification.Message}</p>
-                    <p><strong>Created At:</strong> {notification.DateSent}</p>
+                    <p><strong>Announcement:</strong> {notification.Announcement}</p>
+                    <p><strong>Created At:</strong> {notification.Date_posted}</p>
                     <p><strong>Created By:</strong> {notification.CreatorRole} (UserID: {notification.UserID})</p>
                   </div>
                 ))
@@ -200,3 +200,4 @@ function Inbox() {
 }
 
 export default Inbox;
+

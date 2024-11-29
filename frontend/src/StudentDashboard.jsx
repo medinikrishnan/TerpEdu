@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 function StudentDashboard() {
   const { user_name } = useParams();
+  const navigate = useNavigate(); // React Router hook for navigation
   const [userID, setUserID] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -10,6 +11,11 @@ function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
+
+  // Navigate to a new path
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
 
   const fetchDashboardData = async () => {
     setLoading(true); // Start loading when fetching data
@@ -119,6 +125,28 @@ function StudentDashboard() {
             align-items: center;
           }
 
+          .navbar {
+          display: flex;
+          justify-content: space-around;
+          background-color: #424242;
+          color: white;
+          padding: 8px;
+          width: 100%;
+          font-size: 14px;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        .navbar span {
+          cursor: pointer;
+          padding: 5px 10px;
+          border-radius: 5px;
+        }
+
+        .navbar span:hover {
+          background-color: #616161;
+        }
+
+
           .logo-container {
             display: flex;
             justify-content: center;
@@ -197,6 +225,12 @@ function StudentDashboard() {
         <span>TerpEdu</span>
         <span>Welcome, {user_name}</span>
       </header>
+      <div className="navbar">
+          <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
+          <span onClick={() => handleNavigation('/inst_announcements')}>Announcements</span>
+          <span onClick={() => handleNavigation('/uploaded_materials_student')}>Uploaded materials</span>
+          {/* <span onClick={() => handleNavigation('/view_enrolled_students')}>View enrolled students</span> */}
+        </div>
 
       <div className="logo-container">
         <img src="/TerpEdu.png" alt="TerpEdu Logo" />

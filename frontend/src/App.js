@@ -16,6 +16,7 @@ import CourseManagement from './CourseManagement';
 import AssignCourses from './AssignCourses';
 import StudentDashboard from './StudentDashboard';
 import Chatbot from './Chatbot';
+import UploadedMaterialsStudent from './uploaded_materials_student';
 
 function App() {
   return (
@@ -64,6 +65,8 @@ function App() {
         
         {/* Route for Uploaded Materials page */}
         <Route path="/uploaded_materials" element={<UploadedMaterials />} />
+
+        <Route path="/uploaded_materials_student" element={<UploadedMaterialsStudent />} />
         
         {/* Route for Assigning Courses */}
         <Route path="/assign-courses" element={<AssignCourses />} />

@@ -125,6 +125,31 @@ class CourseController:
             print(f"Error occurred: {e}")  # Log the error for debugging
             return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
     
+    def get_material_for_students(self,course_id):
+        try:
+            materials = self._course_dao.get_course_materials(course_id)
+            print("course_controller", materials)
+            
+            if not materials:
+                return jsonify({"message": "No materials found for the specified user."}), 404
+
+            # Format materials for response
+            formatted_materials = [
+                {
+                    "material_id": material[0],  
+                    "material_type": material[1],
+                    "title": material[2],
+                    "file_path": f"../frontend/public/{material[3]}"  
+                }
+                for material in materials
+            ]
+
+            return jsonify(formatted_materials), 200
+        except Exception as e:
+            print(f"Error occurred: {e}")  # Log the error for debugging
+            return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
+        
+    
     def get_all_courses(self):
         """
         Retrieve all courses from the DAO.

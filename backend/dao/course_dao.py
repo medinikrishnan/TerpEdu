@@ -25,18 +25,20 @@ class CourseDao:
 
     def get_course_materials(self, course_id):
         sql = """
-        SELECT material_id, material_type, title, file_path
+        SELECT course_id, material_type, title, file_path
         FROM course_materials
         WHERE course_id = ?;
         """
         params = (course_id,)
-        return dao.execute_query(sql, params, fetch=True)
+        result= dao.execute_query(sql, params, fetch=True)
+        # print ("dao result",result)
+        return result
     
     def get_course_materials_by_user(self, user_id):
         sql = """
         SELECT * 
         FROM course_materials
-        WHERE user_id = ?;  -- Ensure the column name is user_id
+        WHERE user_id = ?;  
         """
         params = (user_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -44,7 +46,9 @@ class CourseDao:
     def get_course(self, course_id):
         sql = "SELECT course_name FROM courses WHERE course_id = ?"  # Ensure column name is course_id
         param = [course_id]
-        return dao.execute_query(sql, param)[0][0]
+        result= dao.execute_query(sql, param)[0][0]
+        # print("dao result",result)
+        return result
     
     def get_all_courses(self):
         sql = """

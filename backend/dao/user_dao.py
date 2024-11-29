@@ -78,10 +78,10 @@ class UserDao:
             List of notification details, including notification ID, user ID, message, date sent, and course ID.
         """
         sql = """
-        SELECT n.NotificationID, n.UserID, n.Message, n.DateSent, n.course_id, u.role
-        FROM notifications n
-        JOIN users u ON n.UserID = u.UserID
-        WHERE n.course_id = ?
+        SELECT n.id, n.course_id,n.UserID,n.announcement,n.date_posted, u.Role
+        FROM announcements n
+        LEFT JOIN users u ON n.UserID = u.UserID
+        WHERE n.course_id = ? 
         """
         params = [course_id]
         results = dao.execute_query(sql, params, fetch=True)

@@ -36,15 +36,16 @@ class UserController:
         # Convert notifications to a suitable format for response (e.g., JSON)
         response = [
             {
-                "NotificationID": notification[0],
-                "UserID": notification[1],
-                "Message": notification[2],
-                "DateSent": notification[3].strftime('%Y-%m-%d %H:%M:%S'),
-                "CourseID": notification[4],
-                "CreatorRole": notification[5]
+                "AnnouncementID": notification[0],
+                "CourseID": notification[1],
+                "UserID": notification[2],
+                "Announcement": notification[3],
+                "Date_posted": notification[4],
+                "CreatorRole": notification[5]     
             }
             for notification in notifications
         ]
+        
         
         return jsonify(response)
 
