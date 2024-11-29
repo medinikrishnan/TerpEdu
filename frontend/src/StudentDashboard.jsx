@@ -11,11 +11,24 @@ function StudentDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
+
 
   // Navigate to a new path
   const handleNavigation = (path) => {
     navigate(path);
   };
+
+  const handleProfileClick = () => {
+    setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
+  };
+
+  // Handle logout functionality (e.g., clearing session or redirecting)
+  const handleLogout = () => {
+    console.log('Logging out');
+    navigate('/'); // Example of redirecting to login page
+  };
+
 
   const fetchDashboardData = async () => {
     setLoading(true); // Start loading when fetching data
@@ -125,6 +138,40 @@ function StudentDashboard() {
             align-items: center;
           }
 
+          .profile-icon {
+          font-size: 20px;
+          position: absolute;
+          right: 20px;
+          cursor: pointer;
+
+        }
+        
+         .dropdown {
+          position: absolute;
+          right: 20px;
+          top: 50px; /* Position below the icon */
+          // background-color: red;
+          // border: 1px solid #ccc;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+          z-index: 10;
+          width: 100px;
+          text-align: center;
+          // display: ${dropdownVisible ? 'block' : 'none'};
+        }
+
+        .dropdown button {
+          padding: 10px;
+          background-color: #D32F2F;
+          color: white;
+          border: none;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .dropdown button:hover {
+          background-color: #b71c1c;
+        }
+
           .navbar {
           display: flex;
           justify-content: space-around;
@@ -224,6 +271,14 @@ function StudentDashboard() {
       <header className="header">
         <span>TerpEdu</span>
         <span>Welcome, {user_name}</span>
+        <div className="profile-icon" onClick={handleProfileClick}>
+            👤
+            {dropdownVisible && (
+              <div className="dropdown">
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
       </header>
       <div className="navbar">
           <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
