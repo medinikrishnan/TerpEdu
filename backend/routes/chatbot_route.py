@@ -25,7 +25,7 @@ def find_best_match(user_question):
     return None
 
 # Define route to handle chatbot queries
-@chatbot_bp.route("/get_answer", methods=["POST","GET"])
+@chatbot_bp.route("/get_answer", methods=["POST"])
 def get_answer():
     data = request.get_json()
     question = data.get("question", "").lower()
