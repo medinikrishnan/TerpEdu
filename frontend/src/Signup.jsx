@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./chatbot/chatbot.css"; // Import chatbot styling
+import { loadInitialSuggestions, sendMessage } from './chatbot/chatbot.js';
 
 function Signup() {
   const navigate = useNavigate();
@@ -52,24 +53,66 @@ function Signup() {
   };
 
 
-useEffect(() => {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "/chatbot/chatbot.css";
-  document.head.appendChild(link);
+  useEffect(() => {
+    // Dynamically load CSS for the chatbot
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/chatbot/chatbot.css";
+    document.head.appendChild(link);
 
-  const script = document.createElement("script");
-  script.src = "/chatbot/chatbot.js";
-  script.async = true;
-  document.body.appendChild(script);
+    // Dynamically load JS for the chatbot
+    const script = document.createElement("script");
+    script.src = "/chatbot/chatbot.js";
+    script.async = true;
 
-  return () => {
-    document.head.removeChild(link);
-    document.body.removeChild(script);
-  };
-}, []);
+    // Ensure the script is only executed after it has loaded
+    script.onload = () => {
+        console.log("Chatbot script loaded successfully");
+        if (typeof loadInitialSuggestions === "function") {
+            loadInitialSuggestions(); // Call the function from chatbot.js to initialize suggestions
+        }
+    };
 
+    script.onerror = () => {
+        console.error("Failed to load chatbot script");
+    };
 
+    document.body.appendChild(script);
+
+    // Handle event listeners for the chatbot when it is shown
+    if (showChatbot) {
+        const sendButton = document.getElementById("send-btn");
+        const userInput = document.getElementById("user-input");
+
+        const handleSend = () => sendMessage();
+        const handleKeyPress = (e) => {
+            if (e.key === "Enter") sendMessage();
+        };
+
+        if (sendButton && userInput) {
+            sendButton.addEventListener("click", handleSend);
+            userInput.addEventListener("keypress", handleKeyPress);
+        }
+
+        // Cleanup event listeners
+        return () => {
+            if (sendButton && userInput) {
+                sendButton.removeEventListener("click", handleSend);
+                userInput.removeEventListener("keypress", handleKeyPress);
+            }
+        };
+    }
+
+    // Cleanup function to remove dynamically added CSS and JS files
+    return () => {
+        if (link.parentNode) {
+            document.head.removeChild(link);
+        }
+        if (script.parentNode) {
+            document.body.removeChild(script);
+        }
+    };
+}, [showChatbot]);
 
   return (
     <div>
