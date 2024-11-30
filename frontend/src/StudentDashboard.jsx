@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate,useParams } from "react-router-dom";
 
 function StudentDashboard() {
   const { user_name } = useParams();
   const navigate = useNavigate(); // React Router hook for navigation
-  const [userID, setUserID] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userID, setUserID] = useState(localStorage.getItem("user_id"));
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [availableCourses, setAvailableCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   // Navigate to a new path
   const handleNavigation = (path) => {
@@ -29,22 +32,12 @@ function StudentDashboard() {
       console.log("Dashboard data:", data);
       setEnrolledCourses(data.enrolled_courses || []);
       setAvailableCourses(data.available_courses || []);
-      setIsLoggedIn(true);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
       setError("Failed to load data. Please try again.");
     } finally {
       setLoading(false); // Stop loading after data is fetched or error occurred
     }
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (userID.trim() === "") {
-      alert("Please enter a valid User ID");
-      return;
-    }
-    fetchDashboardData();
   };
 
   const handleAddCourse = async () => {
@@ -240,29 +233,6 @@ function StudentDashboard() {
         <p>Loading...</p> // Display loading text while data is being fetched
       ) : error ? (
         <p style={{ color: "red" }}>{error}</p> // Display error message if any error occurs
-      ) : !isLoggedIn ? (
-        <div className="form-container">
-          <form onSubmit={handleLogin}>
-            <label htmlFor="userID" style={{ fontSize: "18px" }}>
-              Enter your User ID:
-            </label>
-            <input
-              type="text"
-              id="userID"
-              value={userID}
-              onChange={(e) => setUserID(e.target.value)}
-              placeholder="Enter your User ID"
-              style={{
-                padding: "10px",
-                margin: "10px",
-                borderRadius: "5px",
-                fontSize: "16px",
-                border: "1px solid #ccc",
-              }}
-            />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
       ) : (
         <div className="dashboard-container">
           <h2 style={{ textAlign: "center", marginBottom: "20px" }}>

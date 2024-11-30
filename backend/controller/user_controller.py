@@ -67,7 +67,7 @@ class UserController:
                 user_name = user_data[1]
 
                 # Return a JSON response with status, role, and user_name
-                return jsonify({"status": "success", "role": role, "user_name": user_name})
+                return jsonify({"status": "success", "role": role, "user_name": user_name, "user_id" : user['user_id']})
             else:
                 return jsonify({"status": "failed", "message": "Invalid credentials"}), 401
 
