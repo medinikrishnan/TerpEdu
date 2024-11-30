@@ -14,6 +14,7 @@ import logging
 project_root = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path to the backend directory
 frontend_build_path = os.path.join(project_root, 'build')
 UPLOAD_FOLDER = os.path.join(project_root, 'build', 'materials')
+# print("upload folder path",UPLOAD_FOLDER)
 
 # Initialize the Flask app
 app = Flask(__name__, static_folder=frontend_build_path, static_url_path='')

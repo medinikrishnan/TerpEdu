@@ -33,6 +33,7 @@ function UploadedMaterials() {
       normalizedPath = `/materials/${normalizedPath.replace(/^.*\/materials\//, '')}`;
     }
     setSelectedFile(normalizedPath);
+    console.log(normalizedPath);
   };
 
   return (
