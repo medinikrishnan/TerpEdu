@@ -57,12 +57,12 @@ function Signup() {
     // Dynamically load CSS for the chatbot
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/chatbot/chatbot.css";
+    link.href = "/chatbot.css";
     document.head.appendChild(link);
 
     // Dynamically load JS for the chatbot
     const script = document.createElement("script");
-    script.src = "/chatbot/chatbot.js";
+    script.src = "/chatbot.js";
     script.async = true;
 
     // Ensure the script is only executed after it has loaded
@@ -345,14 +345,10 @@ function Signup() {
         />
       </div>
 
-      {/* Chatbot Toggle Button */}
       <button className="chatbot-toggle" onClick={toggleChatbot}>
-        <img
-          src="/chatbot/image/icon.png"
-          alt="Chatbot"
-          style={{ width: '50px', height: '50px' }}
-        />
+        <img src="/chatbot-icon2.gif" alt="Chatbot" style={{ width: '120px', height: '90px' }} />
       </button>
+
 
       {/* Chatbot */}
       {showChatbot && (

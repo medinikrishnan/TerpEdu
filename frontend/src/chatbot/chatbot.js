@@ -63,7 +63,7 @@ function sendMessage() {
         const typingIndicator = document.createElement("div");
         typingIndicator.classList.add("typing-indicator");
         typingIndicator.innerHTML = `
-            <img src="./build/typing.gif" alt="Typing...">
+            <img src="/typing.gif" alt="Typing...">
         `;
         chatMessages.appendChild(typingIndicator);
         chatMessages.scrollTop = chatMessages.scrollHeight;

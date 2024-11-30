@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import "./chatbot/chatbot.css"; // Import chatbot styling
+import { loadInitialSuggestions, sendMessage } from './chatbot/chatbot.js';
 
 function Dash() {
   const { user_name } = useParams(); // Extracts user_name from URL parameters
@@ -9,6 +11,12 @@ function Dash() {
   const [loading, setLoading] = useState(false); // State to track loading status
   const [error, setError] = useState(''); // State to store any errors
   const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
+  const [showChatbot, setShowChatbot] = useState(false); // Chatbot visibility state
+
+  const toggleChatbot = () => {
+    console.log("Chatbot visibility toggled:", !showChatbot);
+    setShowChatbot(!showChatbot);
+  };
 
   // Fetch courses based on instructor ID
   const handleFetchCourses = async () => {
@@ -54,6 +62,67 @@ function Dash() {
     console.log('Logging out');
     navigate('/'); // Example of redirecting to login page
   };
+
+  useEffect(() => {
+    // Dynamically load CSS for the chatbot
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/chatbot.css";
+    document.head.appendChild(link);
+
+    // Dynamically load JS for the chatbot
+    const script = document.createElement("script");
+    script.src = "/chatbot.js";
+    script.async = true;
+
+    // Ensure the script is only executed after it has loaded
+    script.onload = () => {
+        console.log("Chatbot script loaded successfully");
+        if (typeof loadInitialSuggestions === "function") {
+            loadInitialSuggestions(); // Call the function from chatbot.js to initialize suggestions
+        }
+    };
+
+    script.onerror = () => {
+        console.error("Failed to load chatbot script");
+    };
+
+    document.body.appendChild(script);
+
+    // Handle event listeners for the chatbot when it is shown
+    if (showChatbot) {
+        const sendButton = document.getElementById("send-btn");
+        const userInput = document.getElementById("user-input");
+
+        const handleSend = () => sendMessage();
+        const handleKeyPress = (e) => {
+            if (e.key === "Enter") sendMessage();
+        };
+
+        if (sendButton && userInput) {
+            sendButton.addEventListener("click", handleSend);
+            userInput.addEventListener("keypress", handleKeyPress);
+        }
+
+        // Cleanup event listeners
+        return () => {
+            if (sendButton && userInput) {
+                sendButton.removeEventListener("click", handleSend);
+                userInput.removeEventListener("keypress", handleKeyPress);
+            }
+        };
+    }
+
+    // Cleanup function to remove dynamically added CSS and JS files
+    return () => {
+        if (link.parentNode) {
+            document.head.removeChild(link);
+        }
+        if (script.parentNode) {
+            document.body.removeChild(script);
+        }
+      };
+    }, [showChatbot]);
 
   return (
     <div>
@@ -270,6 +339,28 @@ function Dash() {
           max-width: 800px;
           width: 100%;
           height: auto;
+
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+          }
+
+          .chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 400px;
+            max-height: 500px;
+            overflow: hidden;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
       `}</style>
 
@@ -346,6 +437,30 @@ function Dash() {
           </div>
         </div>
       </div>
+      
+      <button className="chatbot-toggle" onClick={toggleChatbot}>
+        <img src="/chatbot-icon2.gif" alt="Chatbot" style={{ width: '120px', height: '90px' }} />
+      </button>
+
+
+      {/* Chatbot */}
+      {showChatbot && (
+        <div className="chatbot-container">
+          <div id="chatbox">
+            <div className="chatbot-header">TerpEdu Buddy</div>
+            <div id="chat-messages">
+              <div className="bot-message">
+                <div className="message">Welcome to TerpEdu! I am TerpEdu Buddy.</div>
+              </div>
+              <div id="suggestion-buttons" className="suggestions"></div>
+            </div>
+            <div className="chatbot-footer">
+              <input id="user-input" type="text" placeholder="Ask a question..." />
+              <button id="send-btn">Send</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
