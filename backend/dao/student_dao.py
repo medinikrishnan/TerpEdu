@@ -48,7 +48,7 @@ class StudentDao:
         """
         return dao.execute_query(sql, (course_id,), fetch=True)
 
-    def get_course_materials_by_user(self):
+    def get_course_materials_by_user(self,user_id):
         # Adjust as needed to fetch materials for a specific user
         sql = """
         SELECT material_id, material_type, title, file_path
