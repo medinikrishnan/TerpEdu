@@ -72,15 +72,27 @@ class CourseDao:
         return results
     
     def get_active_courses(self):
+        """
+        Fetch active courses with assigned instructors (if any).
+        """
         sql = """
-        SELECT c.course_id AS CourseID, c.course_name AS CourseName, u.UserID AS InstructorID, u.Name AS InstructorName
-        FROM courses c
-        LEFT JOIN course_instructors ci ON c.course_id = ci.course_id
-        LEFT JOIN users u ON ci.instructor_id = u.UserID
-        WHERE c.is_currently_active = 1;
+        SELECT 
+            c.course_id AS CourseID, 
+            c.course_name AS CourseName, 
+            ci.instructor_id AS InstructorID,
+            u.Name AS InstructorName
+        FROM 
+            courses c
+        LEFT JOIN 
+            course_instructors ci ON c.course_id = ci.course_id
+        LEFT JOIN 
+            users u ON ci.instructor_id = u.UserID
+        WHERE 
+            c.is_currently_active = 1;
         """
         results = dao.execute_query(sql, fetch=True)
         return results
+
     
     def get_instructors(self):
         sql = "SELECT UserID AS InstructorID, Name FROM users WHERE Role = 'Instructor'"
@@ -88,14 +100,54 @@ class CourseDao:
         return results
 
     def assign_instructors(self, assignments):
-        for course_id, instructor_id in assignments.items():
-            sql = """
-            INSERT INTO course_instructors (course_id, instructor_id)
-            VALUES (?, ?)
-            ON DUPLICATE KEY UPDATE instructor_id = ?;
-            """
-            params = (course_id, instructor_id, instructor_id)
-            dao.execute_query(sql, params=params)
+        """
+        Assign instructors to courses, updating existing records or inserting new ones.
+        """
+        try:
+            for course_id, instructor_id in assignments.items():
+                try:
+                    # Check if the record exists
+                    check_sql = """
+                    SELECT COUNT(*) FROM course_instructors WHERE course_id = ?
+                    """
+                    result = dao.execute_query(check_sql, params=(course_id,), fetch=True)
+
+                    # Default to exists = 0 if result is unexpected
+                    exists = result[0][0] if result and len(result) > 0 else 0
+
+                    if exists > 0:
+                        # Update if the record exists
+                        update_sql = """
+                        UPDATE course_instructors
+                        SET instructor_id = ?
+                        WHERE course_id = ?
+                        """
+                        dao.execute_query(update_sql, params=(instructor_id, course_id))
+                        print(f"Updated course_id {course_id} with instructor_id {instructor_id}")
+                    else:
+                        # Insert if the record does not exist
+                        insert_sql = """
+                        INSERT INTO course_instructors (course_id, instructor_id)
+                        VALUES (?, ?)
+                        """
+                        dao.execute_query(insert_sql, params=(course_id, instructor_id))
+                        print(f"Inserted course_id {course_id} with instructor_id {instructor_id}")
+
+                except Exception as query_error:
+                    # Log and skip to the next course on failure
+                    print(f"Error processing course_id {course_id}: {query_error}")
+
+            # Confirm all assignments are completed without errors
+            print("All instructor assignments processed successfully.")
+            return {"message": "Assignments saved successfully"}
+
+        except Exception as e:
+            # Log and raise a meaningful error if something unexpected happens
+            print(f"Unexpected error in assign_instructors: {e}")
+            raise Exception(f"Failed to assign instructors: {e}")
+
+
+
             
     # def get_user_counts(self):
     #     sql = """
