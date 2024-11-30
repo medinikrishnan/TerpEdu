@@ -46,12 +46,14 @@ from routes.student_route import student_bp
 from routes.admin_route import admin_bp
 from routes.user_route import user_bp
 from routes.inst_route import inst_bp
+from routes.chatbot_route import chatbot_bp  
 
 app.register_blueprint(course_bp, url_prefix='/course')
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(inst_bp, url_prefix='/inst')
+app.register_blueprint(chatbot_bp, url_prefix='/chatbot')  # Register chatbot blueprint
 
 # Serve React frontend
 @app.route('/', defaults={'path': ''})
