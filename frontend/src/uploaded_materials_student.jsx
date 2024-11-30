@@ -184,6 +184,7 @@ function UploadedMaterials() {
 
       <header className="header">
         <h1>TerpEdu</h1>
+        <h2>Student Dashboard</h2>
       </header>
 
       <div className="main-container">

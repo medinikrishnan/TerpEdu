@@ -216,6 +216,7 @@ function StudentDashboard() {
 
       <header className="header">
         <span>TerpEdu</span>
+        <span>Student Dashboard</span>
         <span>Welcome, {user_name}</span>
       </header>
       <div className="navbar">
