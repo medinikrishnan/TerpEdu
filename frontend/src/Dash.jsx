@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function Dash() {
   const { user_name } = useParams(); // Extracts user_name from URL parameters
   const navigate = useNavigate(); // React Router hook for navigation
-  const [instructorId, setInstructorId] = useState(''); // State to store instructor ID input
+  const [instructorId, setInstructorId] = useState(localStorage.getItem("user_id")); // State to store instructor ID input
   const [courses, setCourses] = useState([]); // State to store fetched courses
   const [loading, setLoading] = useState(false); // State to track loading status
   const [error, setError] = useState(''); // State to store any errors
   const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
+
+  useEffect(() => {
+    handleFetchCourses();
+  }, []);
 
   // Fetch courses based on instructor ID
   const handleFetchCourses = async () => {
@@ -20,7 +24,7 @@ function Dash() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/inst/get_courses_by_inst/${instructorId}`);
+      const response = await fetch(`http://localhost:3000/inst/get_courses_by_inst/${instructorId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch courses');
       }
@@ -276,6 +280,7 @@ function Dash() {
       <div className="app">
         <header className="header">
           <h1>TerpEdu</h1>
+          <h2>Instructor Dashboard</h2>
           <div className="profile-icon" onClick={handleProfileClick}>
             👤
             {dropdownVisible && (
@@ -305,18 +310,6 @@ function Dash() {
           <div className="main-content">
             {/* Welcome message */}
             <h2>Welcome, {user_name}!</h2>
-            {/* Form to fetch courses based on instructor ID */}
-            <div className="form-container">
-              <label htmlFor="instructorId">Enter Instructor ID:</label>
-              <input
-                type="text"
-                id="instructorId"
-                value={instructorId}
-                onChange={(e) => setInstructorId(e.target.value)}
-              />
-              <button onClick={handleFetchCourses}>Fetch Courses</button>
-              {error && <p className="error-message">{error}</p>}
-            </div>
             {/* List of fetched courses */}
             {loading ? (
               <p>Loading...</p>
