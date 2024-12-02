@@ -7,17 +7,18 @@ class StudentController:
 
     def enroll(self):
         data = request.json
-        user_id = data.get('user_id')
-        course_id = data.get('course_id')
+        user_id = data.get("user_id")
+        course_id = data.get("course_id")
 
         if not user_id or not course_id:
-            return jsonify({"error": "Missing user_id or course_id"}), 400
+            return jsonify({"status": "error", "error": "Missing user_id or course_id"}), 400
 
         try:
             self._student_dao.enroll_in_course(user_id, course_id)
-            return jsonify({"message": "Enrollment successful"}), 200
+            return jsonify({"status": "success", "message": "Enrollment successful"}), 200
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
+            return jsonify({"status": "error", "error": str(e)}), 500
+
 
     def drop(self):
         data = request.json

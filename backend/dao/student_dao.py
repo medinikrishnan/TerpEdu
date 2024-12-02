@@ -4,14 +4,16 @@ class StudentDao:
     def enroll_in_course(self, user_id, course_id):
         sql_check = "SELECT COUNT(*) FROM stu_enrollments WHERE user_id = ?;"
         result = dao.execute_query(sql_check, (user_id,), fetch=True)
-        if result[0][0] >= 3:
+        
+        if result and result[0][0] >= 3:
             raise Exception("Student cannot enroll in more than 3 courses.")
-
+        
         sql_insert = """
         INSERT INTO stu_enrollments (user_id, course_id, enrollment_date)
-        VALUES (?, ?, CURRENT_TIMESTAMP);  -- Add enrollment date here
+        VALUES (?, ?, CURRENT_TIMESTAMP);
         """
         dao.execute_query(sql_insert, (user_id, course_id))
+
 
     def drop_course(self, user_id, course_id):
         sql = "DELETE FROM stu_enrollments WHERE user_id = ? AND course_id = ?;"
@@ -51,7 +53,7 @@ class StudentDao:
     def get_course_materials_by_user(self,user_id):
         # Adjust as needed to fetch materials for a specific user
         sql = """
-        SELECT material_id, material_type, title, file_path
+        SELECT material_type, title, file_path
         FROM course_materials
         WHERE user_id = ?;
         """

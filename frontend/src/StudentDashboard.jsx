@@ -55,18 +55,22 @@ function StudentDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userID, course_id: selectedCourse }),
       });
-      if (!response.ok) {
-        const data = await response.json();
+  
+      const data = await response.json();
+  
+      if (response.ok && data.status === "success") {
+        alert(data.message || "Course added successfully!");
+        fetchDashboardData();
+        setSelectedCourse("");
+      } else {
         throw new Error(data.error || "Failed to add course");
       }
-      alert("Course added successfully!");
-      fetchDashboardData();
-      setSelectedCourse("");
     } catch (error) {
-      console.error("Error adding course:", error);
-      alert("Failed to add course. Please try again.");
+      console.error("Error adding course:", error.message);
+      alert(error.message || "Failed to add course. Please try again.");
     }
   };
+  
 
   const handleDropCourse = async () => {
     if (!selectedCourse) {
@@ -310,7 +314,7 @@ function StudentDashboard() {
       <div className="navbar">
           <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
           <span onClick={() => handleNavigation('/inst_announcements')}>Announcements</span>
-          <span onClick={() => handleNavigation('/uploaded_materials_student')}>Uploaded materials</span>
+          <span onClick={() => handleNavigation('/uploaded_materials')}>Uploaded materials</span>
           {/* <span onClick={() => handleNavigation('/view_enrolled_students')}>View enrolled students</span> */}
         </div>
 

@@ -181,9 +181,9 @@ function Inbox() {
               ) : (
                 notifications.map((notification) => (
                   <div key={notification.NotificationID} className="notification">
-                    <p><strong>Announcement:</strong> {notification.Announcement}</p>
-                    <p><strong>Created At:</strong> {notification.Date_posted}</p>
-                    <p><strong>Created By:</strong> {notification.CreatorRole} (UserID: {notification.UserID})</p>
+                   <p><strong>Announcement:</strong> {notification.Message}</p>
+                   <p><strong>Created At:</strong> {notification.DateSent}</p>
+                  <p><strong>Created By:</strong> {notification.CreatorRole} (UserID: {notification.UserID})</p>
                   </div>
                 ))
               )}
